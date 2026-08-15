@@ -1,0 +1,11 @@
+# Local browser debugging profile
+.cdp-profile/
+
+# Local development server state
+.http-server.pid
+
+# Root-level visual regression/debug screenshots
+/*.png
+
+# Source/reference materials kept locally
+相关资料文档/

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>超兽武装 · Ultra Beast Force | 首页</title>
+<meta name="description" content="《超兽武装》粉丝资料站——七大平行宇宙、十万年轮回、超兽战队全角色图鉴与经典语录。">
+<link rel="stylesheet" href="assets/css/style.css?v=20260815.10">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path d='M24 3 L41 12.5 V32 L24 45 L7 32 V12.5 Z' fill='%23f4f7fb' stroke='%23087f9f' stroke-width='3'/><circle cx='24' cy='24' r='6' fill='%23087f9f'/></svg>">
+</head>
+<body data-page="home">
+<div class="bg-fx"></div>
+<div class="bg-grid"></div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <canvas id="stars"></canvas>
+  <div class="hero-inner">
+    <div>
+      <span class="hero-tag"><i></i>七大平行宇宙 · 每十万年连通七天</span>
+      <h1>超兽武装</h1>
+      <div class="sub-en">ULTRA BEAST FORCE · REV EVOLUTION</div>
+      <p class="lead">
+        广州蓝弧文化出品的原创 3D 科幻动画。当<b>七大平行宇宙</b>再度交汇，冥王复活、雪皇归来，
+        火麟飞与伙伴们驾驶玄武号穿越十万年的因果——<b>已有的事，后必再有；已行的事，后必再行。</b>
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="characters.html">进入角色图鉴 →</a>
+        <a class="btn btn-ghost" href="world.html">了解世界观</a>
+      </div>
+    </div>
+    <div class="hero-mecha">
+      <div class="frame">
+        <img src="assets/img/combo-forms.jpeg" alt="超兽神合体形态">
+        <span class="caption">超兽神 · 合体形态设定</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">SCROLL</div>
+</header>
+
+<main class="page" style="padding-top:0">
+
+  <!-- ============ 统计 ============ -->
+  <section class="stats">
+    <div class="stat reveal"><b>66</b><span>集正片 · 上下两部</span></div>
+    <div class="stat reveal"><b>7</b><span>大平行宇宙</span></div>
+    <div class="stat reveal"><b>8</b><span>位超兽战士</span></div>
+    <div class="stat reveal"><b>10<span style="font-size:.5em">万</span></b><span>年一轮回的宿命</span></div>
+  </section>
+
+  <!-- ============ 作品简介 ============ -->
+  <section class="sec">
+    <div class="sec-head reveal"><h2>作品简介</h2><span class="en">THE SERIES</span><div class="line"></div></div>
+    <div class="duo" id="seriesCards">
+      <article class="duo-card reveal">
+        <div class="no">01</div>
+        <h3>超兽武装之仁者无敌</h3>
+        <div class="meta">33 集 · 2011年4月14日 首播</div>
+        <p>七大平行宇宙连通，冥王复活。火麟飞、天羽、苗条俊自地球出发，跨越龙族、金象族、云蝠族的平行宇宙征途，超兽战队集结成形，&ldquo;信念&rdquo;的主题就此点燃。</p>
+      </article>
+      <article class="duo-card reveal">
+        <div class="no">02</div>
+        <h3>超兽武装之勇者无惧</h3>
+        <div class="meta">33 集 · 2011年11月11日 首播</div>
+        <p>玄冥黑洞之后，战队穿越十万年前。风耀与风影的悲剧、元正的理想、凤凰的牺牲、夜凌云的少年时代逐一展开；鬼谷的惊天阴谋浮出水面，超兽神七合体迎战鬼王，十万年轮回完成闭环。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 超兽战队 ============ -->
+  <section class="sec">
+    <div class="sec-head reveal"><h2>超兽战队</h2><span class="en">ULTRA BEAST FORCE</span><div class="line"></div></div>
+    <div class="team-strip" id="teamStrip"></div>
+    <div style="text-align:center;margin-top:26px" class="reveal">
+      <a class="btn btn-ghost" href="characters.html">查看全部角色档案 →</a>
+    </div>
+  </section>
+
+  <!-- ============ 语录轮播 ============ -->
+  <section class="sec">
+    <div class="sec-head reveal"><h2>信念之声</h2><span class="en">VOICES OF CONVICTION</span><div class="line"></div></div>
+    <div class="quote-stage reveal">
+      <span class="qm">“</span>
+      <p id="heroQuote"></p>
+      <div id="heroQuoteBy"></div>
+      <div class="quote-dots" id="quoteDots"></div>
+    </div>
+  </section>
+
+  <!-- ============ 七大宇宙 ============ -->
+  <section class="sec">
+    <div class="sec-head reveal"><h2>七大平行宇宙</h2><span class="en">SEVEN PARALLEL UNIVERSES</span><div class="line"></div></div>
+    <div class="uni-band" id="uniBand"></div>
+  </section>
+
+  <!-- ============ 站点导航 ============ -->
+  <section class="sec">
+    <div class="sec-head reveal"><h2>深入探索</h2><span class="en">EXPLORE</span><div class="line"></div></div>
+    <div class="entry-grid">
+      <a class="entry-card reveal" href="world.html"><span class="go">→</span><div class="ic">🌌</div><h3>世界观设定</h3><p>平行宇宙、异能锁、超兽神合体、星云体——读懂这个世界的规则。</p></a>
+      <a class="entry-card reveal" href="relations.html"><span class="go">→</span><div class="ic">🕸️</div><h3>人物关系网</h3><p>师徒、宿敌、操纵与救赎——一张图看懂十万年因果。</p></a>
+      <a class="entry-card reveal" href="episodes.html"><span class="go">→</span><div class="ic">📺</div><h3>66 集剧集索引</h3><p>从《平行宇宙》到《使命轮回》，逐集回顾主线脉络。</p></a>
+      <a class="entry-card reveal" href="quotes.html"><span class="go">→</span><div class="ic">💬</div><h3>经典语录</h3><p>冥王与雪皇的哲学对白，那些年震撼过我们的台词。</p></a>
+      <a class="entry-card reveal" href="cast.html"><span class="go">→</span><div class="ic">🎙️</div><h3>配音与制作</h3><p>祖晴、鞠月斌、李团……认识角色背后的声音。</p></a>
+      <a class="entry-card reveal" href="characters.html"><span class="go">→</span><div class="ic">⚔️</div><h3>角色图鉴</h3><p>超兽战队、冥界、圣界——23 位角色的完整档案。</p></a>
+    </div>
+  </section>
+
+</main>
+
+<script src="assets/js/data.js?v=20260815.10"></script>
+<script src="assets/js/baike-data.js?v=20260815.10"></script>
+<script src="assets/js/main.js?v=20260815.10"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
