@@ -683,8 +683,8 @@ function pageCast(){
    全站背景音乐 · 本地音频、点击播放、跨页面恢复
    ============================================================ */
 const BGM_TRACKS = [
-  { title: "主题曲 · 超兽武装", file: "主题曲-超兽武装.mp3" },
-  { title: "片尾曲 · 尘曦", file: "片尾曲-尘曦.mp3" }
+  { title: "主题曲 · 超兽武装", file: "主题曲-超兽武装-128k.mp3" },
+  { title: "片尾曲 · 尘曦", file: "片尾曲-尘曦-128k.mp3" }
 ];
 const BGM_STATE_KEY = "ubf-bgm-state-v1";
 
