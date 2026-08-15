@@ -727,6 +727,22 @@ function buildBgmPlayer(){
   `;
   document.body.appendChild(player);
 
+  let revealTimer = 0;
+  const revealPlayer = () => {
+    window.clearTimeout(revealTimer);
+    player.classList.add("is-revealed");
+  };
+  const concealPlayer = () => {
+    window.clearTimeout(revealTimer);
+    revealTimer = window.setTimeout(() => {
+      if (!player.matches(":hover") && !player.matches(":focus-within")) player.classList.remove("is-revealed");
+    }, 90);
+  };
+  player.addEventListener("mouseenter", revealPlayer);
+  player.addEventListener("mouseleave", concealPlayer);
+  player.addEventListener("focusin", revealPlayer);
+  player.addEventListener("focusout", concealPlayer);
+
   const audio = $(".bgm-audio", player);
   const playBtn = $(".bgm-play", player);
   const playIcon = $(".bgm-play span", playBtn);
@@ -764,8 +780,7 @@ function buildBgmPlayer(){
         trackIndex,
         time: Number.isFinite(audio.currentTime) ? audio.currentTime : 0,
         playing: !audio.paused && !audio.ended,
-        volume: audio.volume,
-        collapsed: player.classList.contains("is-collapsed")
+        volume: audio.volume
       }));
     } catch (_) {}
   }
@@ -897,12 +912,6 @@ function buildBgmPlayer(){
   const savedVolume = Number(store.volume);
   audio.volume = Number.isFinite(savedVolume) ? Math.min(1, Math.max(0, savedVolume)) : 0.48;
   volume.value = String(audio.volume);
-  if (store.collapsed) {
-    player.classList.add("is-collapsed");
-    collapseBtn.setAttribute("aria-expanded", "false");
-    collapseBtn.setAttribute("aria-label", "展开播放器");
-    $(".bgm-collapse span", collapseBtn).textContent = "⌃";
-  }
   loadTrack(trackIndex, { time: resumeTime, autoPlay: hasResumeIntent });
   updatePlayUi();
 }
