@@ -723,7 +723,7 @@ function buildBgmPlayer(){
       </div>
       <div class="bgm-list" hidden></div>
     </div>
-    <audio class="bgm-audio" preload="metadata"></audio>
+    <audio class="bgm-audio" preload="none" playsinline></audio>
   `;
   document.body.appendChild(player);
 
@@ -762,6 +762,7 @@ function buildBgmPlayer(){
   let trackIndex = Number.isInteger(store.trackIndex) ? store.trackIndex : 0;
   let resumeTime = Number.isFinite(Number(store.time)) ? Number(store.time) : 0;
   let hasResumeIntent = store.playing === true;
+  let sourceLoaded = false;
   let saveTimer = 0;
 
   const formatTime = seconds => {
@@ -771,7 +772,7 @@ function buildBgmPlayer(){
     const secs = value % 60;
     return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
   };
-  const trackUrl = track => "assets/audio/" + encodeURIComponent(track.file);
+  const trackUrl = track => "/assets/audio/" + encodeURIComponent(track.file);
   const clampTrack = index => (index + BGM_TRACKS.length) % BGM_TRACKS.length;
 
   function saveState(){
@@ -820,6 +821,11 @@ function buildBgmPlayer(){
   }
 
   function tryPlay(){
+    if (!sourceLoaded) {
+      loadTrack(trackIndex, { time: resumeTime, autoPlay: true });
+      return;
+    }
+    updateStatus("正在加载音乐…");
     const result = audio.play();
     if (result && typeof result.catch === "function") {
       result.catch(() => {
@@ -834,15 +840,17 @@ function buildBgmPlayer(){
     trackIndex = clampTrack(index);
     const track = BGM_TRACKS[trackIndex];
     const seekTo = Number.isFinite(Number(opts.time)) ? Number(opts.time) : 0;
+    sourceLoaded = false;
     updateTrackUi();
-    audio.src = trackUrl(track);
-    audio.load();
     audio.addEventListener("loadedmetadata", () => {
       if (seekTo > 0 && seekTo < audio.duration) audio.currentTime = seekTo;
       progress.value = audio.duration ? String((audio.currentTime / audio.duration) * 100) : "0";
       durationEl.textContent = formatTime(audio.duration);
       if (opts.autoPlay) tryPlay();
     }, { once: true });
+    audio.src = trackUrl(track);
+    sourceLoaded = true;
+    audio.load();
   }
 
   playBtn.addEventListener("click", () => {
@@ -902,6 +910,12 @@ function buildBgmPlayer(){
   audio.addEventListener("ended", () => {
     loadTrack(trackIndex + 1, { autoPlay: true });
   });
+  audio.addEventListener("waiting", () => {
+    if (!audio.paused) updateStatus("正在缓冲…");
+  });
+  audio.addEventListener("canplay", () => {
+    if (!audio.paused) updateStatus();
+  });
   audio.addEventListener("error", () => {
     updatePlayUi();
     updateStatus("音频加载失败，请检查本地文件");
@@ -912,7 +926,8 @@ function buildBgmPlayer(){
   const savedVolume = Number(store.volume);
   audio.volume = Number.isFinite(savedVolume) ? Math.min(1, Math.max(0, savedVolume)) : 0.48;
   volume.value = String(audio.volume);
-  loadTrack(trackIndex, { time: resumeTime, autoPlay: hasResumeIntent });
+  updateTrackUi();
+  if (hasResumeIntent) loadTrack(trackIndex, { time: resumeTime, autoPlay: true });
   updatePlayUi();
 }
 

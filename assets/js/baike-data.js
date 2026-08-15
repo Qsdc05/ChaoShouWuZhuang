@@ -45,7 +45,7 @@ const BAIKE = {
     "lemmaTitle": "龙戬",
     "lemmaDesc": "动画片《超兽武装》及其衍生作品中的角色",
     "summary": "龙戬是动画片《超兽武装》及其衍生作品中的角色。超兽战队的队员之一，身负维持宇宙间平衡的使命，在七大平行宇宙连接的七天内同队友迎战各路强敌，并同欲称霸宇宙的鬼王展开最终决战。七大平行宇宙分开后，龙戬回到属于自己的世界，等待轮回。",
-    "imagePath": "assets/img/baike/longjian-baike.png",
+    "imagePath": "assets/img/baike/longjian-baike.webp",
     "facts": {
       "中文名": "龙戬",
       "饰演": "黎宇航",
@@ -116,7 +116,7 @@ const BAIKE = {
     "lemmaTitle": "苗条俊",
     "lemmaDesc": "动画《超兽武装》及其衍生作品中的主角",
     "summary": "苗条俊，国产原创3D动画《超兽武装》及其衍生作品中的角色。超兽战队的队长兼总指挥，归属于第一平行宇宙。外貌和名字截然相反。一开始胆小怕事，导致指挥作战时常常出现一些低级错误，但是随着时间慢慢地成熟起来，成为超兽战队的核心指挥，是大家不可缺的伙伴。虽然自身的异能量毫无攻击性，却拥有全宇宙独一无二的能力，可以通过体内的异能量产生虫洞穿越过去未来，在关键时刻起着决定性作用。",
-    "imagePath": "assets/img/baike/miaotiaojun-baike.png",
+    "imagePath": "assets/img/baike/miaotiaojun-baike.webp",
     "facts": {
       "中文名": "苗条俊",
       "别名": "小胖墩（Lisa专用）、死胖墩（火麟飞专用）、胖墩（天羽等队员专用）",
@@ -230,7 +230,7 @@ const BAIKE = {
     "lemmaTitle": "夜凌云",
     "lemmaDesc": "3D动画《超兽武装》及其衍生作品中的角色",
     "summary": "夜凌云，广州蓝弧文化传播有限公司制作的3D动画《超兽武装》及其衍生作品中的男性角色。冥王座下四大护法之一，自创云蝠阵使云蝠军团成为七大平行宇宙里最强的一支军队。后来因冥王和雪皇对战的能量冲击，穿越到十万年前的第四平行宇宙，说服十万年前的自己放弃争夺云蝠军团的领袖，以求复活云蝠军团。后来加入了超兽战队。",
-    "imagePath": "assets/img/baike/yelingyun-baike.png",
+    "imagePath": "assets/img/baike/yelingyun-baike.webp",
     "facts": {
       "中文名": "夜凌云",
       "别名": "将军",
@@ -264,7 +264,7 @@ const BAIKE = {
     "lemmaTitle": "鬼王",
     "lemmaDesc": "动画《超兽武装之勇者无惧》中的最终反派BOSS",
     "summary": "鬼王，化名鬼谷，《超兽武装之勇者无惧》中的反派。也是能够召唤星云体的存在。表面上对雪皇忠心耿耿，实际上野心勃勃，一直暗中挑拨冥王与雪皇之间的战争，已达到双方两败俱伤之后自己做收渔利统治宇宙的目标，最终在十万年后得成所愿，但被超兽战队合力阻止，在七大平行宇宙分离的一瞬间被超兽神七合体击败。",
-    "imagePath": "assets/img/baike/guiwang-baike.png",
+    "imagePath": "assets/img/baike/guiwang-baike.webp",
     "facts": {
       "中文名": "鬼王",
       "别名": "鬼谷长老、鬼谷、鬼大爷（粉丝称呼）",
@@ -281,7 +281,7 @@ const BAIKE = {
     "lemmaTitle": "元正",
     "lemmaDesc": "动画《超兽武装》系列中的角色",
     "summary": "元正，国产3D动漫《超兽武装之仁者无敌》和《超兽武装之勇者无惧》中的角色。泰雷的师父，归属于第七平行宇宙，原本是雪皇部下的长老，实力强大，是能召唤星云体的存在。性格和善宽容、心怀大爱。为了感化鲸鲨王而终生放弃使用武力，最终用生命践行自己对爱与自由的信念，被鲸鲨王指使金象族人杀害。",
-    "imagePath": "assets/img/baike/yuanzheng-baike.png",
+    "imagePath": "assets/img/baike/yuanzheng-baike.webp",
     "facts": {
       "中文名": "元正",
       "别名": "元正长老",
@@ -298,7 +298,7 @@ const BAIKE = {
     "lemmaTitle": "雪皇",
     "lemmaDesc": "动画《超兽武装》及其衍生作品中的角色",
     "summary": "雪皇，国产3D长篇动画《超兽武装》及其衍生作品中的角色。第七平行宇宙的统治者，容貌绝美，华丽圣洁的外表下有一颗善良的心，是一位非常和善、仁慈的女性。雪皇的思想和能力都达到极高的境界。她崇尚光明，认为一切都应该在爱的普照下存在。十万年前为了阻止冥王侵略而派兵前往各个平行宇宙，是对应冥王的另一个极端。",
-    "imagePath": "assets/img/baike/xuehuang-baike.png",
+    "imagePath": "assets/img/baike/xuehuang-baike.webp",
     "facts": {
       "中文名": "雪皇",
       "外文名": "Snow Emperor",
@@ -320,7 +320,7 @@ const BAIKE = {
     "lemmaTitle": "剑龙",
     "lemmaDesc": "中国动画《超兽武装》中的角色",
     "summary": "剑龙，中国动画《超兽武装》及其衍生作品中的角色。龙戬和战龙的师父，第二平行宇宙部落青龙祖的领袖。在十万年前无意间误杀了龙飞，还在悲愤之下杀死了许多白龙祖同胞，因而悔恨终生，最终被蝎子王龙莹所杀。",
-    "imagePath": "assets/img/baike/jianlong-baike.png",
+    "imagePath": "assets/img/baike/jianlong-baike.webp",
     "facts": {
       "中文名": "剑龙",
       "别名": "青龙族领袖",
@@ -342,7 +342,7 @@ const BAIKE = {
     "lemmaTitle": "战龙",
     "lemmaDesc": "国产3D长篇动漫《超兽武装》中角色",
     "summary": "战龙，广州蓝弧文化传播有限公司、广东奥飞动漫文化股份有限公司共同投资的国产3D长篇动漫《超兽武装之仁者无敌》和《超兽武装之勇者无惧》中的角色。第二平行宇宙地球青龙族首领剑龙的徒弟，龙戬的师兄。与龙戬比武争夺异能锁输给了龙戬，后为救龙戬被蝎子王杀死。",
-    "imagePath": "assets/img/baike/zhanlong-baike.png",
+    "imagePath": "assets/img/baike/zhanlong-baike.webp",
     "facts": {
       "中文名": "战龙",
       "配音": "赵然",
@@ -412,7 +412,7 @@ const BAIKE = {
     "lemmaTitle": "lisa",
     "lemmaDesc": "《超兽武装》第一平行宇宙中的玄武号中央控制电脑角色",
     "summary": "知道得很多、回答迅速，常常和苗条俊斗嘴。玄武号飞船外壳自爆后因能量过低进入休眠，后来被苗条俊复活；玄易子重新激活控制电脑后恢复正常。",
-    "imagePath": "assets/img/baike/lisa-baike.png",
+    "imagePath": "assets/img/baike/lisa-baike.webp",
     "facts": {
       "身份": "玄武号飞船中央控制电脑",
       "归属地": "第一平行宇宙",

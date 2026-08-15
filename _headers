@@ -1,0 +1,10 @@
+# Cache versioned front-end code and media locally and at Cloudflare's edge.
+# HTML remains revalidated so navigation picks up deployments quickly.
+/assets/css/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/assets/js/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/assets/img/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/assets/audio/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
