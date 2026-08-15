@@ -678,9 +678,238 @@ function pageCast(){
     '<div class="crew-item reveal"><div class="k">' + esc(c.k) + '</div><div class="v">' + esc(c.v) + '</div></div>').join("");
 }
 
+
+/* ============================================================
+   全站背景音乐 · 本地音频、点击播放、跨页面恢复
+   ============================================================ */
+const BGM_TRACKS = [
+  { title: "主题曲 · 超兽武装", file: "主题曲-超兽武装.mp3" },
+  { title: "片尾曲 · 尘曦", file: "片尾曲-尘曦.mp3" }
+];
+const BGM_STATE_KEY = "ubf-bgm-state-v1";
+
+function buildBgmPlayer(){
+  if (!BGM_TRACKS.length || document.querySelector("[data-bgm-player]")) return;
+
+  const player = document.createElement("aside");
+  player.className = "bgm-player";
+  player.setAttribute("data-bgm-player", "");
+  player.setAttribute("aria-label", "网站背景音乐播放器");
+  player.innerHTML = `
+    <div class="bgm-head">
+      <button class="bgm-play bgm-icon-btn" type="button" aria-label="播放背景音乐" aria-pressed="false"><span aria-hidden="true">▶</span></button>
+      <div class="bgm-meta">
+        <div class="bgm-kicker"><i></i> BACKGROUND MUSIC</div>
+        <div class="bgm-title" title=""></div>
+        <div class="bgm-status">点击播放背景音乐</div>
+      </div>
+      <button class="bgm-collapse bgm-icon-btn" type="button" aria-label="收起播放器" aria-expanded="true"><span aria-hidden="true">⌄</span></button>
+    </div>
+    <div class="bgm-body">
+      <div class="bgm-progress-row">
+        <input class="bgm-progress" type="range" min="0" max="100" step="0.1" value="0" aria-label="播放进度">
+        <div class="bgm-time"><span class="bgm-current">00:00</span><span class="bgm-duration">00:00</span></div>
+      </div>
+      <div class="bgm-controls">
+        <div class="bgm-track-controls">
+          <button class="bgm-prev bgm-control-btn" type="button" aria-label="上一首">⏮</button>
+          <button class="bgm-next bgm-control-btn" type="button" aria-label="下一首">⏭</button>
+          <button class="bgm-list-toggle bgm-control-btn" type="button" aria-label="显示播放列表" aria-expanded="false">曲目</button>
+        </div>
+        <label class="bgm-volume" title="音量">
+          <span aria-hidden="true">音量</span>
+          <input class="bgm-volume-range" type="range" min="0" max="1" step="0.01" value="0.48" aria-label="音量">
+        </label>
+      </div>
+      <div class="bgm-list" hidden></div>
+    </div>
+    <audio class="bgm-audio" preload="metadata"></audio>
+  `;
+  document.body.appendChild(player);
+
+  const audio = $(".bgm-audio", player);
+  const playBtn = $(".bgm-play", player);
+  const playIcon = $(".bgm-play span", playBtn);
+  const titleEl = $(".bgm-title", player);
+  const statusEl = $(".bgm-status", player);
+  const progress = $(".bgm-progress", player);
+  const currentEl = $(".bgm-current", player);
+  const durationEl = $(".bgm-duration", player);
+  const volume = $(".bgm-volume-range", player);
+  const listEl = $(".bgm-list", player);
+  const listToggle = $(".bgm-list-toggle", player);
+  const collapseBtn = $(".bgm-collapse", player);
+  const store = (() => {
+    try { return JSON.parse(sessionStorage.getItem(BGM_STATE_KEY) || "{}"); }
+    catch (_) { return {}; }
+  })();
+  let trackIndex = Number.isInteger(store.trackIndex) ? store.trackIndex : 0;
+  let resumeTime = Number.isFinite(Number(store.time)) ? Number(store.time) : 0;
+  let hasResumeIntent = store.playing === true;
+  let saveTimer = 0;
+
+  const formatTime = seconds => {
+    if (!Number.isFinite(seconds) || seconds < 0) return "00:00";
+    const value = Math.floor(seconds);
+    const minutes = Math.floor(value / 60);
+    const secs = value % 60;
+    return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+  };
+  const trackUrl = track => "assets/audio/" + encodeURIComponent(track.file);
+  const clampTrack = index => (index + BGM_TRACKS.length) % BGM_TRACKS.length;
+
+  function saveState(){
+    try {
+      sessionStorage.setItem(BGM_STATE_KEY, JSON.stringify({
+        trackIndex,
+        time: Number.isFinite(audio.currentTime) ? audio.currentTime : 0,
+        playing: !audio.paused && !audio.ended,
+        volume: audio.volume,
+        collapsed: player.classList.contains("is-collapsed")
+      }));
+    } catch (_) {}
+  }
+
+  function updateStatus(text){
+    if (text) {
+      statusEl.textContent = text;
+      return;
+    }
+    statusEl.textContent = audio.paused ? "点击播放背景音乐" : "正在播放 · 点击可暂停";
+  }
+
+  function updatePlayUi(){
+    const playing = !audio.paused && !audio.ended;
+    player.classList.toggle("is-playing", playing);
+    playBtn.setAttribute("aria-pressed", String(playing));
+    playBtn.setAttribute("aria-label", playing ? "暂停背景音乐" : "播放背景音乐");
+    playIcon.textContent = playing ? "Ⅱ" : "▶";
+    updateStatus();
+  }
+
+  function renderList(){
+    listEl.innerHTML = BGM_TRACKS.map((track, index) =>
+      '<button class="bgm-list-item' + (index === trackIndex ? ' is-current' : '') + '" type="button" data-track-index="' + index + '">' +
+      '<span class="bgm-list-index">' + String(index + 1).padStart(2, "0") + '</span>' +
+      '<span>' + esc(track.title) + '</span>' +
+      '<span class="bgm-list-state">' + (index === trackIndex ? "当前" : "播放") + '</span>' +
+      '</button>'
+    ).join("");
+  }
+
+  function updateTrackUi(){
+    const track = BGM_TRACKS[trackIndex];
+    titleEl.textContent = track.title;
+    titleEl.title = track.title;
+    renderList();
+  }
+
+  function tryPlay(){
+    const result = audio.play();
+    if (result && typeof result.catch === "function") {
+      result.catch(() => {
+        updatePlayUi();
+        updateStatus("请点击播放按钮继续");
+      });
+    }
+  }
+
+  function loadTrack(index, options){
+    const opts = options || {};
+    trackIndex = clampTrack(index);
+    const track = BGM_TRACKS[trackIndex];
+    const seekTo = Number.isFinite(Number(opts.time)) ? Number(opts.time) : 0;
+    updateTrackUi();
+    audio.src = trackUrl(track);
+    audio.load();
+    audio.addEventListener("loadedmetadata", () => {
+      if (seekTo > 0 && seekTo < audio.duration) audio.currentTime = seekTo;
+      progress.value = audio.duration ? String((audio.currentTime / audio.duration) * 100) : "0";
+      durationEl.textContent = formatTime(audio.duration);
+      if (opts.autoPlay) tryPlay();
+    }, { once: true });
+  }
+
+  playBtn.addEventListener("click", () => {
+    if (audio.paused || audio.ended) tryPlay();
+    else audio.pause();
+  });
+  $(".bgm-prev", player).addEventListener("click", () => {
+    loadTrack(trackIndex - 1, { autoPlay: !audio.paused });
+  });
+  $(".bgm-next", player).addEventListener("click", () => {
+    loadTrack(trackIndex + 1, { autoPlay: !audio.paused });
+  });
+  progress.addEventListener("input", () => {
+    if (audio.duration) audio.currentTime = (Number(progress.value) / 100) * audio.duration;
+  });
+  volume.addEventListener("input", () => {
+    audio.volume = Number(volume.value);
+    saveState();
+  });
+  listToggle.addEventListener("click", () => {
+    const open = listEl.hasAttribute("hidden");
+    if (open) listEl.removeAttribute("hidden");
+    else listEl.setAttribute("hidden", "");
+    listToggle.setAttribute("aria-expanded", String(open));
+  });
+  listEl.addEventListener("click", event => {
+    const button = event.target.closest("[data-track-index]");
+    if (!button) return;
+    const nextIndex = Number(button.dataset.trackIndex);
+    if (nextIndex === trackIndex) {
+      if (audio.paused) tryPlay();
+      return;
+    }
+    loadTrack(nextIndex, { autoPlay: !audio.paused });
+  });
+  collapseBtn.addEventListener("click", () => {
+    const collapsed = player.classList.toggle("is-collapsed");
+    collapseBtn.setAttribute("aria-expanded", String(!collapsed));
+    collapseBtn.setAttribute("aria-label", collapsed ? "展开播放器" : "收起播放器");
+    $(".bgm-collapse span", collapseBtn).textContent = collapsed ? "⌃" : "⌄";
+    saveState();
+  });
+
+  audio.addEventListener("play", () => { updatePlayUi(); saveState(); });
+  audio.addEventListener("pause", () => { updatePlayUi(); saveState(); });
+  audio.addEventListener("timeupdate", () => {
+    currentEl.textContent = formatTime(audio.currentTime);
+    if (audio.duration) progress.value = String((audio.currentTime / audio.duration) * 100);
+    if (!saveTimer) {
+      saveTimer = window.setTimeout(() => { saveTimer = 0; saveState(); }, 800);
+    }
+  });
+  audio.addEventListener("loadedmetadata", () => {
+    durationEl.textContent = formatTime(audio.duration);
+    currentEl.textContent = formatTime(audio.currentTime);
+  });
+  audio.addEventListener("ended", () => {
+    loadTrack(trackIndex + 1, { autoPlay: true });
+  });
+  audio.addEventListener("error", () => {
+    updatePlayUi();
+    updateStatus("音频加载失败，请检查本地文件");
+  });
+  window.addEventListener("pagehide", saveState);
+  window.addEventListener("beforeunload", saveState);
+
+  const savedVolume = Number(store.volume);
+  audio.volume = Number.isFinite(savedVolume) ? Math.min(1, Math.max(0, savedVolume)) : 0.48;
+  volume.value = String(audio.volume);
+  if (store.collapsed) {
+    player.classList.add("is-collapsed");
+    collapseBtn.setAttribute("aria-expanded", "false");
+    collapseBtn.setAttribute("aria-label", "展开播放器");
+    $(".bgm-collapse span", collapseBtn).textContent = "⌃";
+  }
+  loadTrack(trackIndex, { time: resumeTime, autoPlay: hasResumeIntent });
+  updatePlayUi();
+}
+
 /* ---------------- 启动 ---------------- */
 document.addEventListener("DOMContentLoaded", () => {
-  buildNav(); buildFooter();
+  buildNav(); buildFooter(); buildBgmPlayer();
   const page = document.body.dataset.page;
   if (page === "home")      pageHome();
   if (page === "world")     pageWorld();

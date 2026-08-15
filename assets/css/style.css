@@ -1048,3 +1048,76 @@ body[data-page="relations"] .rel-wrap{gap:18px}
   body[data-page="relations"] .rel-side{padding:18px}
   body[data-page="relations"] .mobile-rel-hint{display:inline}
 }
+
+/* ============================================================
+   全站背景音乐播放器 · 浅色悬浮面板
+   ============================================================ */
+.bgm-player{
+  position:fixed;
+  right:clamp(14px,2vw,28px);
+  bottom:clamp(14px,2vw,26px);
+  z-index:140;
+  width:min(360px,calc(100vw - 28px));
+  color:var(--text);
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(8,127,159,.20);
+  border-radius:18px;
+  box-shadow:0 18px 48px rgba(38,78,98,.18),0 3px 12px rgba(38,78,98,.08);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  overflow:hidden;
+  transition:box-shadow .25s ease,transform .25s ease,border-color .25s ease;
+}
+.bgm-player:hover{border-color:rgba(8,127,159,.36);box-shadow:0 22px 58px rgba(38,78,98,.22),0 4px 14px rgba(38,78,98,.10)}
+.bgm-player.is-playing{border-color:rgba(8,127,159,.34)}
+.bgm-head{display:flex;align-items:center;gap:11px;padding:12px 12px 11px}
+.bgm-play{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid rgba(8,127,159,.24);background:linear-gradient(145deg,#0b91b0,#087f9f);color:#fff;box-shadow:0 7px 16px rgba(8,127,159,.22);font-size:15px;line-height:1;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.bgm-play:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(8,127,159,.30)}
+.bgm-play:active{transform:translateY(0) scale(.96)}
+.bgm-meta{min-width:0;flex:1;line-height:1.3}
+.bgm-kicker{display:flex;align-items:center;gap:6px;color:#6a8794;font-size:9px;letter-spacing:1.5px;font-weight:800}
+.bgm-kicker i{display:inline-block;width:5px;height:5px;border-radius:50%;background:#d59a28;box-shadow:0 0 0 3px rgba(213,154,40,.12)}
+.bgm-player.is-playing .bgm-kicker i{background:#0b91b0;box-shadow:0 0 0 3px rgba(11,145,176,.13);animation:bgmPulse 1.5s ease-in-out infinite}
+@keyframes bgmPulse{50%{transform:scale(.72);opacity:.45}}
+.bgm-title{margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:800;color:#173f56}
+.bgm-status{margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#78909b;font-size:10px}
+.bgm-icon-btn,.bgm-control-btn{font-family:var(--font);cursor:pointer}
+.bgm-collapse{flex:none;width:30px;height:30px;border:1px solid #dce9ed;border-radius:9px;background:#f8fbfc;color:#66818e;font-size:17px;line-height:1;transition:color .2s,border-color .2s,background .2s}
+.bgm-collapse:hover{color:var(--cyan);border-color:rgba(8,127,159,.35);background:#edf8fa}
+.bgm-body{padding:0 13px 12px;transition:opacity .2s ease,max-height .25s ease,padding .25s ease}
+.bgm-player.is-collapsed .bgm-body{display:none}
+.bgm-progress-row{display:flex;align-items:center;gap:10px}
+.bgm-progress{--bgm-progress:0%;flex:1;min-width:0;height:4px;appearance:none;-webkit-appearance:none;border-radius:99px;outline:none;background:linear-gradient(90deg,var(--cyan) 0 var(--bgm-progress),#dcebee var(--bgm-progress) 100%);cursor:pointer}
+.bgm-progress::-webkit-slider-thumb,.bgm-volume-range::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:12px;height:12px;border:2px solid #fff;border-radius:50%;background:var(--cyan);box-shadow:0 1px 5px rgba(8,127,159,.3);cursor:pointer}
+.bgm-progress::-moz-range-thumb,.bgm-volume-range::-moz-range-thumb{width:9px;height:9px;border:2px solid #fff;border-radius:50%;background:var(--cyan);box-shadow:0 1px 5px rgba(8,127,159,.3);cursor:pointer}
+.bgm-time{display:flex;justify-content:space-between;gap:5px;min-width:76px;color:#7b919a;font-size:10px;font-variant-numeric:tabular-nums}
+.bgm-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:11px}
+.bgm-track-controls{display:flex;align-items:center;gap:6px}
+.bgm-control-btn{height:28px;min-width:29px;padding:0 8px;border:1px solid #deeaed;border-radius:8px;background:#fbfdfe;color:#52717f;font-size:12px;line-height:1;transition:color .2s,border-color .2s,background .2s,transform .2s}
+.bgm-control-btn:hover{color:var(--cyan);border-color:rgba(8,127,159,.34);background:#eef9fb;transform:translateY(-1px)}
+.bgm-list-toggle{font-size:11px;letter-spacing:1px}
+.bgm-volume{display:flex;align-items:center;gap:7px;color:#77909b;font-size:10px;white-space:nowrap}
+.bgm-volume-range{width:72px;height:4px;appearance:none;-webkit-appearance:none;border-radius:99px;outline:none;background:#dcebee;cursor:pointer}
+.bgm-list{margin-top:11px;padding-top:8px;border-top:1px solid #e5eff1}
+.bgm-list[hidden]{display:none}
+.bgm-list-item{display:grid;grid-template-columns:26px minmax(0,1fr) auto;align-items:center;gap:8px;width:100%;padding:8px 7px;border:0;border-radius:8px;background:transparent;color:#557482;text-align:left;font-family:var(--font);font-size:12px;cursor:pointer;transition:background .2s,color .2s}
+.bgm-list-item:hover{background:#eff9fb;color:var(--cyan)}
+.bgm-list-item.is-current{background:#eaf7f9;color:#087f9f;font-weight:700}
+.bgm-list-index{color:#9ab0b9;font-size:10px;font-variant-numeric:tabular-nums}
+.bgm-list-state{color:#9ab0b9;font-size:10px;font-weight:500}
+.bgm-list-item.is-current .bgm-list-state{color:#087f9f}
+.bgm-audio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden}
+.bgm-player button:focus-visible,.bgm-player input:focus-visible{outline:2px solid #0b91b0;outline-offset:2px}
+
+@media (max-width:720px){
+  .bgm-player{right:12px;bottom:12px;width:min(350px,calc(100vw - 24px));border-radius:16px}
+  .bgm-head{padding:10px}
+  .bgm-body{padding:0 11px 11px}
+  .bgm-controls{gap:8px}
+  .bgm-volume span{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .bgm-player,.bgm-play,.bgm-control-btn{transition:none}
+  .bgm-player.is-playing .bgm-kicker i{animation:none}
+}
