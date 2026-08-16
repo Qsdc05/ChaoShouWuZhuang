@@ -25,8 +25,9 @@ const LOGO_SVG = '<svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http:
   + '</svg>';
 
 function currentPage(){
-  const p = location.pathname.split("/").pop() || "index.html";
-  return p === "" ? "index.html" : p;
+  const p = location.pathname.split("/").filter(Boolean).pop() || "index.html";
+  if (p === "index") return "index.html";
+  return p.endsWith(".html") ? p : p + ".html";
 }
 function buildNav(){
   const nav = document.createElement("nav");
