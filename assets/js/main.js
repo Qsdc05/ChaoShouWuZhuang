@@ -14,7 +14,7 @@ if (typeof BAIKE !== "undefined") {
 
 /* ---------------- 导航与页脚 ---------------- */
 const PAGES = [
-  ["index.html","首页"],["world.html","世界观"],["characters.html","角色图鉴"],
+  ["index.html","首页"],["world.html","世界观"],["timeline.html","时间线"],["characters.html","角色图鉴"],
   ["relations.html","关系网"],["episodes.html","剧集"],["quotes.html","语录"],["cast.html","配音"]
 ];
 const LOGO_SVG = '<svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">'
@@ -606,6 +606,80 @@ function pageRelations(){
 }
 
 /* ============================================================
+   页面：十万年时间线
+   ============================================================ */
+function pageTimeline(){
+  const track = $("#timelineTrack");
+  const filters = $("#timelineFilters");
+  const count = $("#timelineCount");
+  const stats = {
+    events: $("#timelineEventTotal"),
+    phases: $("#timelinePhaseTotal"),
+    branches: $("#timelineBranchTotal")
+  };
+  if (!track || !filters || !Array.isArray(DB.timeline)) return;
+
+  const phases = [...new Set(DB.timeline.map(item => item.phase))];
+  const branchTotal = DB.timeline.reduce((total, item) => total + (item.branches || []).length, 0);
+  if (stats.events) stats.events.textContent = DB.timeline.length;
+  if (stats.phases) stats.phases.textContent = phases.length;
+  if (stats.branches) stats.branches.textContent = branchTotal;
+
+  filters.innerHTML = ['全部', ...phases].map((phase, index) =>
+    '<button class="timeline-filter' + (index === 0 ? ' on' : '') + '" type="button" data-phase="'
+    + esc(phase) + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '">' + esc(phase) + '</button>'
+  ).join("");
+
+  function branchMarkup(item){
+    if (!item.branches || !item.branches.length) return '';
+    return '<div class="timeline-branches" aria-label="历史分支">'
+      + item.branches.map((branch, index) =>
+        '<div class="timeline-branch branch-' + index + '">'
+        + '<div class="timeline-branch-label">' + esc(branch.label) + '</div>'
+        + '<h4>' + esc(branch.title) + '</h4>'
+        + '<p>' + esc(branch.text) + '</p>'
+        + '</div>'
+      ).join("")
+      + '</div>';
+  }
+
+  function eventMarkup(item){
+    return '<article class="timeline-event tone-' + esc(item.tone) + '" data-phase="' + esc(item.phase) + '">'
+      + '<div class="timeline-marker" aria-hidden="true"><span>' + esc(item.mark) + '</span></div>'
+      + '<div class="timeline-card">'
+      + '<div class="timeline-card-head"><span class="timeline-period">' + esc(item.period) + '</span>'
+      + '<span class="timeline-phase">' + esc(item.phase) + '</span></div>'
+      + '<h3>' + esc(item.title) + '</h3>'
+      + '<p class="timeline-summary">' + esc(item.summary) + '</p>'
+      + '<div class="timeline-detail"><span>因果注记</span>' + esc(item.detail) + '</div>'
+      + '<div class="timeline-tags">' + (item.tags || []).map(tag => '<span>' + esc(tag) + '</span>').join("") + '</div>'
+      + branchMarkup(item)
+      + '</div></article>';
+  }
+
+  function render(phase){
+    const list = phase === '全部' ? DB.timeline : DB.timeline.filter(item => item.phase === phase);
+    track.innerHTML = list.length
+      ? list.map(eventMarkup).join('')
+      : '<div class="timeline-empty">暂时没有符合条件的时间线事件。</div>';
+    if (count) count.textContent = '显示 ' + list.length + ' / ' + DB.timeline.length + ' 个节点';
+  }
+
+  filters.addEventListener('click', event => {
+    const button = event.target.closest('.timeline-filter');
+    if (!button) return;
+    $$('.timeline-filter', filters).forEach(item => {
+      const active = item === button;
+      item.classList.toggle('on', active);
+      item.setAttribute('aria-pressed', String(active));
+    });
+    render(button.dataset.phase);
+  });
+
+  render('全部');
+}
+
+/* ============================================================
    页面：剧集
    ============================================================ */
 function pageEpisodes(){
@@ -934,11 +1008,14 @@ function buildBgmPlayer(){
 /* ---------------- 启动 ---------------- */
 document.addEventListener("DOMContentLoaded", () => {
   buildNav(); buildFooter(); buildBgmPlayer();
-  const page = document.body.dataset.page;
+  /* 部分静态服务器 / 浏览器缓存组合可能丢失 body[data-page]，用文件名做兜底。 */
+  const pageMap = {"index.html":"home","world.html":"world","timeline.html":"timeline","characters.html":"chars","relations.html":"relations","episodes.html":"episodes","quotes.html":"quotes","cast.html":"cast"};
+  const page = document.body.dataset.page || pageMap[currentPage()] || "";
   if (page === "home")      pageHome();
   if (page === "world")     pageWorld();
   if (page === "chars")     pageChars();
   if (page === "relations") pageRelations();
+  if (page === "timeline")  pageTimeline();
   if (page === "episodes")  pageEpisodes();
   if (page === "quotes")    pageQuotes();
   if (page === "cast")      pageCast();
